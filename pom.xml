@@ -12,7 +12,7 @@
 	<artifactId>webapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>webapp</name>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<description>Backend for Web Application</description>
 	<dependencies>
 		<dependency>
@@ -56,14 +56,6 @@
 			        </archive>
 			    </configuration>
 			</plugin>
-			<plugin>
-		        <groupId>com.heroku.sdk</groupId>
-		        <artifactId>heroku-maven-plugin</artifactId>
-		        <version>3.0.5</version>
-		        <configuration>
-					<appName>wd-webapp-be</appName>
-				</configuration>
-		    </plugin>
 		</plugins>
 	</build>
 
