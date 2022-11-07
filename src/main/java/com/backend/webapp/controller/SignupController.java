@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.webapp.model.LoginRequest;
-import com.backend.webapp.model.Users;
+import com.backend.webapp.mapper.RequestMapper;
+import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.repository.UsersRepository;
 
 @RestController
-@RequestMapping("/login")
-public class LoginController {
+@RequestMapping("/signup")
+public class SignupController {
 	
 	@Autowired
 	private UsersRepository usersRepository;
@@ -22,16 +22,13 @@ public class LoginController {
 	@SuppressWarnings("rawtypes")
 	@PostMapping()
 	@CrossOrigin(origins = { "https://wd-webapp-fe.el.r.appspot.com" })
-	public ResponseEntity performLogin(@RequestBody LoginRequest loginRequest) {
-		Users user = usersRepository.findByUserId(loginRequest.getUsername());
-		if(null != user && 
-				null != user.getUserId() && 
-				user.getUserId().equalsIgnoreCase(loginRequest.getUsername()) && 
-				null != user.getPasswordHash() && 
-				user.getPasswordHash().equalsIgnoreCase(loginRequest.getPassword())) {
-			return ResponseEntity.ok("Success");
+	public ResponseEntity addNewUser(@RequestBody SignupRequest signupRequest) {
+		try {
+			usersRepository.save(RequestMapper.mapToUsers(signupRequest));
+			return ResponseEntity.ok().body("User Added");
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body("Failed");
 		}
-		return ResponseEntity.badRequest().body("Failed");
 	}
 	
 }
