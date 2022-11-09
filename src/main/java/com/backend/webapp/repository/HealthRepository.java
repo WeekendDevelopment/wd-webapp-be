@@ -8,6 +8,6 @@ import com.backend.webapp.model.Health;
 
 public interface HealthRepository extends MongoRepository<Health, String> {
 
-	public List<Health> findByHealth(String health);
-	
+    public List<Health> findByHealth(String health);
+
 }
