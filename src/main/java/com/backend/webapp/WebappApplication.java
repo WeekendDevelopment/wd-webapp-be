@@ -10,13 +10,13 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories
 public class WebappApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(WebappApplication.class, args);
-	}
-	
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(WebappApplication.class);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(WebappApplication.class, args);
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(WebappApplication.class);
+    }
 
 }
