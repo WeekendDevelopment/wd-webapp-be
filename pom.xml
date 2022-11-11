@@ -14,6 +14,10 @@
 	<name>webapp</name>
 	<packaging>jar</packaging>
 	<description>Backend for Web Application</description>
+	<properties>
+		<spring-cloud-gcp.version>3.4.0</spring-cloud-gcp.version>
+		<spring-cloud.version>2021.0.5</spring-cloud.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -38,8 +42,16 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+		  <groupId>org.springframework.cloud</groupId>
+		  <artifactId>spring-cloud-starter-bootstrap</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter</artifactId>
+		</dependency>
+		<dependency>
 		    <groupId>com.google.cloud</groupId>
-		    <artifactId>google-cloud-bigquery</artifactId>
+		    <artifactId>spring-cloud-gcp-starter-secretmanager</artifactId>
 		</dependency>
 
 		<dependency>
@@ -63,6 +75,20 @@
 	      <type>pom</type>
 	      <scope>import</scope>
 	    </dependency>
+	    <dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>spring-cloud-gcp-dependencies</artifactId>
+				<version>${spring-cloud-gcp.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 	  </dependencies>
 	</dependencyManagement>
 	<build>
