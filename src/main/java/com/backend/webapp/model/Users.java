@@ -2,13 +2,19 @@ package com.backend.webapp.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.constraints.NotNull;
 
 @Document
 public class Users extends Profile {
 
     @Id
     private String id;
+
+    @NotNull
     private String userId;
+
     private String email;
     private String passwordHash;
     private String role;
