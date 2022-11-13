@@ -2,26 +2,41 @@ package com.backend.webapp.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document
 
 public class Profile {
 
-    private String Sex;
+    private String gender;
 
     private String city;
 
     private String address;
 
-    private String findMateGender;
+    private String preferredGender;
+    private List<MateDescription> mateQualities;
 
-    private String mateDescription;
-
-    public String getSex() {
-        return Sex;
+    public enum MateDescription {
+        FRIENDLY,TALKATIVE,GAMER,EMPLOYEE,SHARE_WORK_EQUALLY,SLEEP_EARLY,NON_ALCHOLIC
     }
 
-    public void setSex(String sex) {
-        Sex = sex;
+    public List<MateDescription> getMateQualities() {
+        return mateQualities;
+    }
+
+    public void setMateQualities(List<MateDescription> mateQualities) {
+        this.mateQualities = mateQualities;
+    }
+
+
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getCity() {
@@ -41,18 +56,12 @@ public class Profile {
     }
 
     public String getFindMateGender() {
-        return findMateGender;
+        return preferredGender;
     }
 
     public void setFindMateGender(String findMateGender) {
-        this.findMateGender = findMateGender;
+        this.preferredGender = findMateGender;
     }
 
-    public String getMateDescription() {
-        return mateDescription;
-    }
 
-    public void setMateDescription(String mateDescription) {
-        this.mateDescription = mateDescription;
-    }
 }
