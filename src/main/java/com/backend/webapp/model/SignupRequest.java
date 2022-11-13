@@ -1,9 +1,16 @@
 package com.backend.webapp.model;
 
+import javax.validation.constraints.NotNull;
+
 public class SignupRequest {
 
+    @NotNull
     private String userId;
+
+    @NotNull
     private String email;
+
+    @NotNull
     private String passwordHash;
     private String role = "user";
 

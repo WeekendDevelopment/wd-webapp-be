@@ -1,8 +1,13 @@
 package com.backend.webapp.model;
 
+import javax.validation.constraints.NotNull;
+
 public class LoginRequest {
 
+    @NotNull
     private String username;
+
+    @NotNull
     private String password;
 
     public String getUsername() {
