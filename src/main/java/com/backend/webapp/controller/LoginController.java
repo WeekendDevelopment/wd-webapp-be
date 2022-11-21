@@ -12,6 +12,7 @@ import com.backend.webapp.model.LoginRequest;
 import com.backend.webapp.model.Users;
 import com.backend.webapp.repository.UsersRepository;
 import com.backend.webapp.security.EncryptionUtil;
+import com.backend.webapp.security.JwtTokenUtil;
 import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
 
 @RestController
@@ -39,7 +40,10 @@ public class LoginController {
                     && null != user.getPasswordHash()) {
                 String decryptedPassword = EncryptionUtil.decryptData(secretManagerTemplate, user.getPasswordHash());
                 if (password.equalsIgnoreCase(decryptedPassword)) {
-                    return ResponseEntity.ok("Success");
+//                	JwtTokenUtil jwt = new JwtTokenUtil(user.getEmail(), decryptedPassword);
+//                	String token = jwt.generateJwtToken();
+//                    return ResponseEntity.ok(jwt.validateJwtToken(token));
+                	return ResponseEntity.ok("Success");
                 }
             }
         } catch (Exception e) {
