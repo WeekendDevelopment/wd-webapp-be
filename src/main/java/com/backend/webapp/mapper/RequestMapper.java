@@ -14,7 +14,7 @@ public final class RequestMapper {
         user.setEmail(signupRequest.getEmail());
         user.setPasswordHash(signupRequest.getPasswordHash());
         user.setRole(signupRequest.getRole());
-        user.setUserId(signupRequest.getUserId());
+        user.setFullName(signupRequest.getFullName());
         return user;
     }
 
