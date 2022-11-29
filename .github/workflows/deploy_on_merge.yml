@@ -7,6 +7,9 @@ jobs:
   #Build job
   maven_build:
     name: Maven Build
+    permissions:
+      id-token: write
+      contents: read
     #Run on Ubuntu using the latest version
     runs-on: ubuntu-latest
     #Job's steps
