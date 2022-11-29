@@ -38,7 +38,4 @@ jobs:
           service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
       #GCP Deployment
       - name: Deploy to Google Cloud
-        uses: 'google-github-actions/deploy-appengine@v1'
-        with:
-          deliverables: 'src/main/appengine/app.yaml'
-          project_id: '${{ secrets.GCP_PROJECT }}'
+        run: yes | mvn appengine:deploy
