@@ -42,6 +42,7 @@ public class SignupController {
                 return ResponseEntity.badRequest()
                         .body(new SignupResponse().status(RequestStatusEnum.FAILED).message("User Already Exists"));
             }
+            // validating if proper cipher text is received
             EncryptionUtil.decryptData(secretManagerTemplate, signupRequest.getPasswordHash());
             usersRepository.save(RequestMapper.mapToUsers(signupRequest));
             return ResponseEntity.ok()

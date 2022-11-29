@@ -44,8 +44,7 @@ public class LoginController {
             Users user = usersRepository.findByEmail(loginRequest.getEmail());
             if (null != user && null != user.getEmail() && user.getEmail().equalsIgnoreCase(loginRequest.getEmail())
                     && null != user.getPasswordHash()) {
-                if (password
-                        .equalsIgnoreCase(EncryptionUtil.decryptData(secretManagerTemplate, user.getPasswordHash()))) {
+                if (password.equals(EncryptionUtil.decryptData(secretManagerTemplate, user.getPasswordHash()))) {
                     logger.info("Login Success with user {}", loginRequest.getEmail());
                     return ResponseEntity
                             .ok(new LoginResponse().signedJwtToken(JwtTokenUtil.generateJwtToken(user.getEmail()))
