@@ -40,4 +40,5 @@ jobs:
       - name: Deploy to Google Cloud
         uses: 'google-github-actions/deploy-appengine@v1'
         with:
+          deliverables: 'src/main/appengine/app.yaml'
           project_id: '${{ secrets.GCP_PROJECT }}'
