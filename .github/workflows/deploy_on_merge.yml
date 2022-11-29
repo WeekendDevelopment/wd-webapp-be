@@ -38,7 +38,7 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           create_credentials_file: true
-          workload_identity_provider: 'projects/${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_PROJECT_ID }}/locations/global/workloadIdentityPools/wd-webapp-fe-pool/providers/${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_PROVIDER_ID }}'
+          workload_identity_provider: 'projects/${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_PROJECT_ID }}/locations/global/workloadIdentityPools/${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_ID }}/providers/${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_PROVIDER_ID }}'
           service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
           project_id: '${{ secrets.GCP_PROJECT }}'
       #GCP Deployment
