@@ -1,10 +1,20 @@
 package com.backend.webapp.model;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class BasicUserDetails {
 
+    @NotBlank(message = "Required field - fullName is missing")
     private String fullName;
+
+    @NotBlank(message = "Required field - email is missing")
+    @Email
     private String email;
+
+    @NotBlank(message = "Required field - passwordHash is missing")
     private String passwordHash;
+
     private String role;
 
     public String getFullName() {

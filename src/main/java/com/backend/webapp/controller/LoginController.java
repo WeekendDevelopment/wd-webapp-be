@@ -4,12 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.webapp.exception.ErrorHandler;
 import com.backend.webapp.model.LoginRequest;
 import com.backend.webapp.model.LoginResponse;
 import com.backend.webapp.model.Users;
@@ -20,13 +22,16 @@ import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
 
 import static com.backend.webapp.model.RequestStatusEnum.FAILED;
 import static com.backend.webapp.model.RequestStatusEnum.SUCCESS;
+
+import javax.validation.Valid;
+
 import static com.backend.webapp.constant.ErrorConstants.INTERNAL_SERVER_ERROR;
 import static com.backend.webapp.constant.ErrorConstants.INCORRECT_CREDENTIALS;
-import static com.backend.webapp.constant.ErrorConstants.INVALID_REQUEST_PARAMETERS;
 
 @RestController
 @RequestMapping("/login")
-public class LoginController {
+@Validated
+public class LoginController extends ErrorHandler {
 
     private static final Logger logger = LogManager.getLogger(LoginController.class);
 
@@ -39,11 +44,7 @@ public class LoginController {
     @SuppressWarnings("rawtypes")
     @PostMapping()
     @CrossOrigin(origins = { "https://wd-webapp-fe.el.r.appspot.com" })
-    public ResponseEntity performLogin(@RequestBody LoginRequest loginRequest) {
-        if (null == loginRequest.getEmail() || null == loginRequest.getPassword()) {
-            return ResponseEntity.badRequest()
-                    .body(new LoginResponse().status(FAILED).message(INVALID_REQUEST_PARAMETERS));
-        }
+    public ResponseEntity performLogin(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             String password = EncryptionUtil.decryptData(secretManagerTemplate, loginRequest.getPassword());
             Users user = usersRepository.findByEmail(loginRequest.getEmail());
@@ -61,6 +62,7 @@ public class LoginController {
             return ResponseEntity.internalServerError()
                     .body(new LoginResponse().status(FAILED).message(INTERNAL_SERVER_ERROR));
         }
+        logger.info("Login Failed with user {}", loginRequest.getEmail());
         return ResponseEntity.badRequest().body(new LoginResponse().status(FAILED).message(INCORRECT_CREDENTIALS));
     }
 
