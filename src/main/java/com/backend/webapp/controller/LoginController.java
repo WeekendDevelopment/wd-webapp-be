@@ -58,7 +58,8 @@ public class LoginController {
             }
         } catch (Exception e) {
             logger.error("Exception occured on invoking /login with user {}", loginRequest.getEmail(), e);
-            return ResponseEntity.internalServerError().body(new LoginResponse().status(FAILED).message(INTERNAL_SERVER_ERROR));
+            return ResponseEntity.internalServerError()
+                    .body(new LoginResponse().status(FAILED).message(INTERNAL_SERVER_ERROR));
         }
         return ResponseEntity.badRequest().body(new LoginResponse().status(FAILED).message(INCORRECT_CREDENTIALS));
     }

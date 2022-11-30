@@ -17,7 +17,7 @@ public final class EncryptionUtil {
 
     private EncryptionUtil() {
     }
-    
+
     private static final Logger logger = LogManager.getLogger(EncryptionUtil.class);
 
     private static KeyStore keyStore;
@@ -30,7 +30,7 @@ public final class EncryptionUtil {
             cipher.init(Cipher.ENCRYPT_MODE, publickey);
             return Base64.getEncoder().encodeToString(cipher.doFinal(data.getBytes()));
         } catch (Exception e) {
-        	logger.error("Exception occured while encrypting data", e);
+            logger.error("Exception occured while encrypting data", e);
             throw e;
         }
     }
@@ -49,7 +49,7 @@ public final class EncryptionUtil {
             cipher.init(Cipher.DECRYPT_MODE, privatekey);
             return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
         } catch (Exception e) {
-        	logger.error("Exception occured while decrypting data", e);
+            logger.error("Exception occured while decrypting data", e);
             throw e;
         }
     }
@@ -65,7 +65,7 @@ public final class EncryptionUtil {
                 EncryptionUtil.keyStore = keystore;
             }
         } catch (Exception e) {
-        	logger.error("Exception occured while loading keystore from GCP", e);
+            logger.error("Exception occured while loading keystore from GCP", e);
             EncryptionUtil.keyStore = null;
             throw e;
         }

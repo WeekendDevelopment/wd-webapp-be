@@ -33,12 +33,11 @@ public class EncryptionKeyController {
     public ResponseEntity getPublicKey() {
         try {
             return ResponseEntity.ok(new EncryptionKeyResponse()
-            		.encryptionKey(EncryptionUtil.getPublicKeyAsString(secretManagerTemplate))
-            		.status(SUCCESS));
+                    .encryptionKey(EncryptionUtil.getPublicKeyAsString(secretManagerTemplate)).status(SUCCESS));
         } catch (Exception e) {
             logger.error("Exception occured while getting public key from Google Cloud", e);
-            return ResponseEntity.internalServerError().body(
-                    new BaseResponse().status(FAILED).message(GCP_GET_PUBLIC_KEY_ERROR));
+            return ResponseEntity.internalServerError()
+                    .body(new BaseResponse().status(FAILED).message(GCP_GET_PUBLIC_KEY_ERROR));
         }
     }
 

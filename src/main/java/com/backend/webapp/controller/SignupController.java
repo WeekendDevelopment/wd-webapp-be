@@ -49,8 +49,7 @@ public class SignupController {
             // validating if proper cipher text is received
             EncryptionUtil.decryptData(secretManagerTemplate, signupRequest.getPasswordHash());
             usersRepository.save(RequestMapper.mapToUsers(signupRequest));
-            return ResponseEntity.ok()
-                    .body(new SignupResponse().status(SUCCESS).message("User Added"));
+            return ResponseEntity.ok().body(new SignupResponse().status(SUCCESS).message("User Added"));
         } catch (Exception e) {
             logger.error("Exception occured while adding user {}", signupRequest.getEmail(), e);
             return ResponseEntity.internalServerError()

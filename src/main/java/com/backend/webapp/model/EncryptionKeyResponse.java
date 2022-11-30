@@ -2,19 +2,19 @@ package com.backend.webapp.model;
 
 public class EncryptionKeyResponse extends BaseResponse {
 
-	private String encryptionKey;
+    private String encryptionKey;
 
-	public String getEncryptionKey() {
-		return encryptionKey;
-	}
+    public String getEncryptionKey() {
+        return encryptionKey;
+    }
 
-	public void setEncryptionKey(String encryptionKey) {
-		this.encryptionKey = encryptionKey;
-	}
-	
-	public EncryptionKeyResponse encryptionKey(String encryptionKey) {
-		this.encryptionKey = encryptionKey;
-		return this;
-	}
-	
+    public void setEncryptionKey(String encryptionKey) {
+        this.encryptionKey = encryptionKey;
+    }
+
+    public EncryptionKeyResponse encryptionKey(String encryptionKey) {
+        this.encryptionKey = encryptionKey;
+        return this;
+    }
+
 }
