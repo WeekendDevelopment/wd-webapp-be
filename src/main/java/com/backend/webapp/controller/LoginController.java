@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.webapp.model.LoginRequest;
 import com.backend.webapp.model.LoginResponse;
-import com.backend.webapp.model.RequestStatusEnum;
 import com.backend.webapp.model.Users;
 import com.backend.webapp.repository.UsersRepository;
 import com.backend.webapp.security.EncryptionUtil;
 import com.backend.webapp.security.JwtTokenUtil;
 import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
+
+import static com.backend.webapp.model.RequestStatusEnum.FAILED;
+import static com.backend.webapp.model.RequestStatusEnum.SUCCESS;
+import static com.backend.webapp.constant.ErrorConstants.INTERNAL_SERVER_ERROR;
+import static com.backend.webapp.constant.ErrorConstants.INCORRECT_CREDENTIALS;
+import static com.backend.webapp.constant.ErrorConstants.INVALID_REQUEST_PARAMETERS;
 
 @RestController
 @RequestMapping("/login")
@@ -37,7 +42,7 @@ public class LoginController {
     public ResponseEntity performLogin(@RequestBody LoginRequest loginRequest) {
         if (null == loginRequest.getEmail() || null == loginRequest.getPassword()) {
             return ResponseEntity.badRequest()
-                    .body(new LoginResponse().status(RequestStatusEnum.FAILED).message("Invalid Request"));
+                    .body(new LoginResponse().status(FAILED).message(INVALID_REQUEST_PARAMETERS));
         }
         try {
             String password = EncryptionUtil.decryptData(secretManagerTemplate, loginRequest.getPassword());
@@ -48,14 +53,14 @@ public class LoginController {
                     logger.info("Login Success with user {}", loginRequest.getEmail());
                     return ResponseEntity
                             .ok(new LoginResponse().signedJwtToken(JwtTokenUtil.generateJwtToken(user.getEmail()))
-                                    .status(RequestStatusEnum.SUCCESS).message("Login Success"));
+                                    .status(SUCCESS).message("Login Success"));
                 }
             }
         } catch (Exception e) {
             logger.error("Exception occured on invoking /login with user {}", loginRequest.getEmail(), e);
-            return ResponseEntity.internalServerError().body("Internal Server Error");
+            return ResponseEntity.internalServerError().body(new LoginResponse().status(FAILED).message(INTERNAL_SERVER_ERROR));
         }
-        return ResponseEntity.badRequest().body("Login Failed");
+        return ResponseEntity.badRequest().body(new LoginResponse().status(FAILED).message(INCORRECT_CREDENTIALS));
     }
 
 }

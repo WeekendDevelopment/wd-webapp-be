@@ -2,12 +2,14 @@ package com.backend.webapp.security;
 
 import java.io.ByteArrayInputStream;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
 
@@ -15,6 +17,8 @@ public final class EncryptionUtil {
 
     private EncryptionUtil() {
     }
+    
+    private static final Logger logger = LogManager.getLogger(EncryptionUtil.class);
 
     private static KeyStore keyStore;
 
@@ -24,13 +28,14 @@ public final class EncryptionUtil {
             PublicKey publickey = keyStore.getCertificate("servicekey").getPublicKey();
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.ENCRYPT_MODE, publickey);
-            return Base64.getEncoder().encodeToString(cipher.doFinal("Hello World".getBytes()));
+            return Base64.getEncoder().encodeToString(cipher.doFinal(data.getBytes()));
         } catch (Exception e) {
+        	logger.error("Exception occured while encrypting data", e);
             throw e;
         }
     }
 
-    public static String getPublicKeyAsString(SecretManagerTemplate secretManagerTemplate) throws KeyStoreException {
+    public static String getPublicKeyAsString(SecretManagerTemplate secretManagerTemplate) throws Exception {
         loadKeyStore(secretManagerTemplate);
         return Base64.getEncoder().encodeToString(keyStore.getCertificate("servicekey").getPublicKey().getEncoded());
     }
@@ -44,11 +49,12 @@ public final class EncryptionUtil {
             cipher.init(Cipher.DECRYPT_MODE, privatekey);
             return new String(cipher.doFinal(Base64.getDecoder().decode(cipherText)));
         } catch (Exception e) {
+        	logger.error("Exception occured while decrypting data", e);
             throw e;
         }
     }
 
-    private static void loadKeyStore(SecretManagerTemplate secretManagerTemplate) {
+    private static void loadKeyStore(SecretManagerTemplate secretManagerTemplate) throws Exception {
         try {
             if (EncryptionUtil.keyStore == null) {
                 String keyStorePassword = secretManagerTemplate.getSecretString(GCPConstants.SERVICE_KEYSTORE_JKS_PWD);
@@ -59,8 +65,9 @@ public final class EncryptionUtil {
                 EncryptionUtil.keyStore = keystore;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("Exception occured while loading keystore from GCP", e);
             EncryptionUtil.keyStore = null;
+            throw e;
         }
     }
 
