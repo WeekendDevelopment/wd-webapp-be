@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.webapp.exception.CustomError;
 import com.backend.webapp.exception.ErrorHandler;
+import com.backend.webapp.model.BaseResponse;
 import com.backend.webapp.model.LoginRequest;
 import com.backend.webapp.model.LoginResponse;
 import com.backend.webapp.model.Users;
 import com.backend.webapp.repository.UsersRepository;
 import com.backend.webapp.security.EncryptionUtil;
 import com.backend.webapp.security.JwtTokenUtil;
+import com.backend.webapp.util.MongoDocumentFinder;
 import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
 
 import static com.backend.webapp.model.RequestStatusEnum.FAILED;
@@ -47,23 +50,24 @@ public class LoginController extends ErrorHandler {
     public ResponseEntity performLogin(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             String password = EncryptionUtil.decryptData(secretManagerTemplate, loginRequest.getPassword());
-            Users user = usersRepository.findByEmail(loginRequest.getEmail());
-            if (null != user && null != user.getEmail() && user.getEmail().equalsIgnoreCase(loginRequest.getEmail())
-                    && null != user.getPasswordHash()) {
-                if (password.equals(EncryptionUtil.decryptData(secretManagerTemplate, user.getPasswordHash()))) {
-                    logger.info("Login Success with user {}", loginRequest.getEmail());
-                    return ResponseEntity
-                            .ok(new LoginResponse().signedJwtToken(JwtTokenUtil.generateJwtToken(user.getEmail()))
-                                    .status(SUCCESS).message("Login Success"));
-                }
+            Users user = MongoDocumentFinder.findDocumentByIdentifier(new Users().email(loginRequest.getEmail()),
+                    usersRepository);
+            if (password.equals(EncryptionUtil.decryptData(secretManagerTemplate, user.getPasswordHash()))) {
+                logger.info("Login Success with user {}", loginRequest.getEmail());
+                return ResponseEntity
+                        .ok(new LoginResponse().signedJwtToken(JwtTokenUtil.generateJwtToken(user.getEmail()))
+                                .status(SUCCESS).message("Login Success"));
             }
+        } catch (CustomError e) {
+            logger.error("Error occured on invoking /login with user {}", loginRequest.getEmail(), e);
+            return ResponseEntity.badRequest().body(new BaseResponse().status(FAILED).message(e.getErrorMessage()));
         } catch (Exception e) {
             logger.error("Exception occured on invoking /login with user {}", loginRequest.getEmail(), e);
             return ResponseEntity.internalServerError()
-                    .body(new LoginResponse().status(FAILED).message(INTERNAL_SERVER_ERROR));
+                    .body(new BaseResponse().status(FAILED).message(INTERNAL_SERVER_ERROR));
         }
         logger.info("Login Failed with user {}", loginRequest.getEmail());
-        return ResponseEntity.badRequest().body(new LoginResponse().status(FAILED).message(INCORRECT_CREDENTIALS));
+        return ResponseEntity.badRequest().body(new BaseResponse().status(FAILED).message(INCORRECT_CREDENTIALS));
     }
 
 }
