@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.webapp.exception.ErrorHandler;
 import com.backend.webapp.mapper.RequestMapper;
+import com.backend.webapp.model.BaseResponse;
 import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.model.SignupResponse;
 import com.backend.webapp.model.Users;
@@ -50,7 +51,7 @@ public class SignupController extends ErrorHandler {
             if (user != null) {
                 logger.info("User already exists for given email {}", signupRequest.getEmail());
                 return ResponseEntity.badRequest()
-                        .body(new SignupResponse().status(FAILED).message(DUPLICATE_EMAIL_ERROR));
+                        .body(new BaseResponse().status(FAILED).message(DUPLICATE_EMAIL_ERROR));
             }
             // validating if proper cipher text is received
             EncryptionUtil.decryptData(secretManagerTemplate, signupRequest.getPasswordHash());
@@ -59,7 +60,7 @@ public class SignupController extends ErrorHandler {
         } catch (Exception e) {
             logger.error("Exception occured while adding user {}", signupRequest.getEmail(), e);
             return ResponseEntity.internalServerError()
-                    .body(new SignupResponse().status(FAILED).message(INTERNAL_SERVER_ERROR));
+                    .body(new BaseResponse().status(FAILED).message(INTERNAL_SERVER_ERROR));
         }
     }
 

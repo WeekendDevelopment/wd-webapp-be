@@ -10,6 +10,8 @@ public final class ApplicationConstants {
     public static final String COLON = ":";
     public static final String SERVICE_NAME = "wd-webapp-be";
 
+    public static final String PASSWORD_MASKED = "**********";
+
     // 2 hours validity time
     public static final long JWT_EXPIRATION_TIME = 2 * 60 * 60;
     public static final String JWT_TOKEN_HEADER = "Authorization"; // for sending jwt token
