@@ -26,4 +26,9 @@ public class Health {
         this.health = health;
     }
 
+    public Health health(String health) {
+        this.health = health;
+        return this;
+    }
+
 }
