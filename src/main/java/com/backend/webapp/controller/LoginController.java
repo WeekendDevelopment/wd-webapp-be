@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +45,6 @@ public class LoginController extends ErrorHandler {
 
     @SuppressWarnings("rawtypes")
     @PostMapping()
-    @CrossOrigin(origins = { "https://wd-webapp-fe.el.r.appspot.com" })
     public ResponseEntity performLogin(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             String password = EncryptionUtil.decryptData(secretManagerTemplate, loginRequest.getPassword());
