@@ -17,12 +17,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http.addFilterBefore(jwtTokenUtil, BasicAuthenticationFilter.class).csrf().disable().build(); // need to
-                                                                                                             // add
-                                                                                                             // cross
-                                                                                                             // site
-                                                                                                             // request
-                                                                                                             // forgery
-                                                                                                             // protection
+        // TODO: need to add cross site request forgery protection
+        return http.addFilterBefore(jwtTokenUtil, BasicAuthenticationFilter.class).cors().and().csrf().disable()
+                .build();
     }
 }

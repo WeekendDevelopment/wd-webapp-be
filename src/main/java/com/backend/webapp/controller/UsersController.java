@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +37,6 @@ public class UsersController extends ErrorHandler {
 
     @SuppressWarnings("rawtypes")
     @GetMapping()
-    @CrossOrigin(origins = { "https://wd-webapp-fe.el.r.appspot.com" })
     public ResponseEntity getUserData(@PathVariable("email") String email) {
         try {
             Users user = MongoDocumentFinder.findDocumentByIdentifier(new Users().email(email), usersRepository);
@@ -56,7 +54,6 @@ public class UsersController extends ErrorHandler {
 
     @SuppressWarnings("rawtypes")
     @PatchMapping()
-    @CrossOrigin(origins = { "https://wd-webapp-fe.el.r.appspot.com" })
     public ResponseEntity updateUserData(@PathVariable("email") String email, @RequestBody Users userUpdate) {
         try {
             Users user = MongoDocumentFinder.findDocumentByIdentifier(new Users().email(email), usersRepository);
