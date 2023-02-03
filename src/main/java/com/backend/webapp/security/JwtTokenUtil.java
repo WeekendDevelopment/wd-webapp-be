@@ -1,23 +1,6 @@
 package com.backend.webapp.security;
 
-import java.io.IOException;
-import java.util.Base64;
-import java.util.Date;
-
-import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.http.HttpStatus;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import com.backend.webapp.controller.LoginController;
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -25,12 +8,26 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultJwtParser;
 import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.micrometer.core.instrument.util.StringUtils;
+import org.apache.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Date;
 
 import static com.backend.webapp.constant.ApplicationConstants.COLON;
 import static com.backend.webapp.constant.ApplicationConstants.JWT_EXPIRATION_TIME;
+import static com.backend.webapp.constant.ApplicationConstants.JWT_TOKEN_HEADER;
 import static com.backend.webapp.constant.ApplicationConstants.SERVICE_NAME;
 import static com.backend.webapp.constant.ApplicationConstants.UNPROTECTED_ENDPOINTS;
-import static com.backend.webapp.constant.ApplicationConstants.JWT_TOKEN_HEADER;
 import static com.backend.webapp.constant.ApplicationConstants.USER_HEADER;
 
 @Component

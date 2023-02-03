@@ -1,17 +1,15 @@
 package com.backend.webapp.security;
 
+import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.crypto.Cipher;
 import java.io.ByteArrayInputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Base64;
-
-import javax.crypto.Cipher;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
 
 public final class EncryptionUtil {
 

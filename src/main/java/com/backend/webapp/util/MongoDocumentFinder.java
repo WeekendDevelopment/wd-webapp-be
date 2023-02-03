@@ -1,14 +1,13 @@
 package com.backend.webapp.util;
 
-import java.util.List;
-
+import com.backend.webapp.exception.CustomError;
+import com.backend.webapp.document.Users;
+import com.backend.webapp.validator.DocumentValidator;
 import org.springframework.data.domain.Example;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.util.CollectionUtils;
 
-import com.backend.webapp.exception.CustomError;
-import com.backend.webapp.model.Users;
-import com.backend.webapp.validator.DocumentValidator;
+import java.util.List;
 
 import static com.backend.webapp.constant.ErrorConstants.DOCUMENT_NOT_FOUNT_ERROR_DESCRIPTION;
 

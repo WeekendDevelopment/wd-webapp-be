@@ -1,28 +1,24 @@
 package com.backend.webapp.controller;
 
-import java.util.List;
-
+import com.backend.webapp.api.HealthApi;
+import com.backend.webapp.document.Health;
+import com.backend.webapp.model.HealthStatus;
+import com.backend.webapp.model.Status;
+import com.backend.webapp.repository.HealthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.webapp.model.HealthStatus;
-import com.backend.webapp.model.HealthStatus.Status;
-import com.backend.webapp.model.Health;
-import com.backend.webapp.repository.HealthRepository;
+import java.util.List;
 
 @RestController
-@RequestMapping("/health")
-public class HealthController {
+public class HealthController implements HealthApi {
 
     @Autowired
     private HealthRepository healthRepository;
 
-    @SuppressWarnings("rawtypes")
-    @GetMapping()
-    public ResponseEntity checkHealth() {
+    @Override
+    public ResponseEntity<HealthStatus> getHealth() {
         HealthStatus health = new HealthStatus();
         health.setServiceStatus(Status.UP);
         try {

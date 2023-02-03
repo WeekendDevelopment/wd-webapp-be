@@ -1,9 +1,9 @@
 package com.backend.webapp.mapper;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.backend.webapp.model.SignupRequest;
-import com.backend.webapp.model.Users;
+import com.backend.webapp.document.Users;
+import com.backend.webapp.model.User;
+import org.apache.commons.lang3.StringUtils;
 
 public final class RequestMapper {
 
@@ -20,7 +20,7 @@ public final class RequestMapper {
         return user;
     }
 
-    public static Users mapPatchUserRequest(Users user, Users userUpdate) {
+    public static Users mapPatchUserRequest(Users user, User userUpdate) {
         if (StringUtils.isNotBlank(userUpdate.getFullName())) {
             user.setFullName(userUpdate.getFullName());
         }

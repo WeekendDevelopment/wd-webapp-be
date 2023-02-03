@@ -1,0 +1,258 @@
+openapi: 3.0.0
+info:
+  title: wd-webapp-be
+  description: Webapp backend API specification
+  version: 0.0.1
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Health check for the service.
+      description: Returns health check for the service and MongoDB.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+  /login:
+    post:
+      operationId: performLogin
+      summary: Login endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /signup:
+    post:
+      operationId: addNewUser
+      summary: Signup endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignupResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /encryptionKey:
+    get:
+      operationId: getEncryptionKey
+      summary: Encryption key endpoint
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EncryptionKeyResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{email}:
+    get:
+      operationId: getUserData
+      summary: Get Users endpoint
+      parameters:
+        - in: path
+          name: email
+          schema:
+            type: string
+            format: email
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      operationId: updateUserData
+      summary: Patch Users endpoint
+      parameters:
+        - in: path
+          name: email
+          schema:
+            type: string
+            format: email
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      allOf:
+        - $ref: '#/components/schemas/Profile'
+        - type: object
+    Profile:
+      allOf:
+        - $ref: '#/components/schemas/BasicUserDetails'
+        - type: object
+          properties:
+            phoneNumber:
+              type: string
+            country:
+              type: string
+            about:
+              type: string
+            status:
+              type: string
+    EncryptionKeyResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            encryptionKey:
+              type: string
+    SignupRequest:
+      allOf:
+        - $ref: '#/components/schemas/BasicUserDetails'
+        - type: object
+    SignupResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+    BasicUserDetails:
+      type: object
+      required:
+        - fullName
+        - email
+        - passwordHash
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+          format: email
+        passwordHash:
+          type: string
+        role:
+          type: string
+          default: user
+    LoginResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            signedJwtToken:
+              type: string
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    HealthStatus:
+      type: object
+      properties:
+        serviceStatus:
+          $ref: '#/components/schemas/Status'
+        databaseStatus:
+          $ref: '#/components/schemas/Status'
+    Status:
+      enum:
+        - UP
+        - DOWN
+    BaseResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - SUCCESS
+          default: SUCCESS
+        message:
+          type: string
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - FAILED
+          default: FAILED
+        message:
+          type: string
