@@ -1,7 +1,7 @@
 package com.backend.webapp.validator;
 
-import com.backend.webapp.exception.CustomError;
 import com.backend.webapp.document.Users;
+import com.backend.webapp.exception.CustomError;
 
 import static com.backend.webapp.constant.ErrorConstants.INVALID_DOCUMENT_ERROR_DESCRIPTION;
 
