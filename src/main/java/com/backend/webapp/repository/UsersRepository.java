@@ -1,8 +1,7 @@
 package com.backend.webapp.repository;
 
+import com.backend.webapp.document.Users;
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-import com.backend.webapp.model.Users;
 
 public interface UsersRepository extends MongoRepository<Users, String> {
 
