@@ -1,15 +1,13 @@
 package com.backend.webapp.controller;
 
 import com.backend.webapp.api.UsersApi;
+import com.backend.webapp.delegate.impl.UserServiceDelegateImpl;
 import com.backend.webapp.document.Users;
 import com.backend.webapp.exception.CustomError;
 import com.backend.webapp.exception.ErrorHandler;
-import com.backend.webapp.mapper.RequestMapper;
 import com.backend.webapp.model.BaseResponse;
 import com.backend.webapp.model.Error;
 import com.backend.webapp.model.User;
-import com.backend.webapp.repository.UsersRepository;
-import com.backend.webapp.util.MongoDocumentFinder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +23,14 @@ public class UsersController extends ErrorHandler implements UsersApi {
     private static final Logger logger = LogManager.getLogger(UsersController.class);
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserServiceDelegateImpl userService;
 
     @Override
     public ResponseEntity getUserData(String email) {
         try {
-            Users user = MongoDocumentFinder.findDocumentByIdentifier(new Users().email(email), usersRepository);
+            Users user = userService.getUser(email);
             user.setPasswordHash(PASSWORD_MASKED);
+            logger.info("User fetch successful for email {}", email);
             return ResponseEntity.ok(user);
         } catch (CustomError e) {
             logger.error("Error occurred on invoking /users with user {}", email, e);
@@ -45,9 +44,8 @@ public class UsersController extends ErrorHandler implements UsersApi {
     @Override
     public ResponseEntity updateUserData(String email, User userUpdate) {
         try {
-            Users user = MongoDocumentFinder.findDocumentByIdentifier(new Users().email(email), usersRepository);
             // add validations
-            usersRepository.save(RequestMapper.mapPatchUserRequest(user, userUpdate));
+            userService.updateUser(email, userUpdate);
             return ResponseEntity.ok(new BaseResponse().message("User Updated"));
         } catch (CustomError e) {
             logger.error("Error occurred on invoking /users with user {}", email, e);

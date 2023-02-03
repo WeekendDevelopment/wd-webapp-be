@@ -1,7 +1,7 @@
 package com.backend.webapp.mapper;
 
-import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.document.Users;
+import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.model.User;
 import org.apache.commons.lang3.StringUtils;
 
