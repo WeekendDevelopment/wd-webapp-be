@@ -18,6 +18,10 @@ public final class ApplicationConstants {
     public static final String USER_HEADER = "X-REQUEST-USER"; // for sending current user email who logged in
     public static final List<String> UNPROTECTED_ENDPOINTS = List.of("/login", "/signup", "/encryptionKey", "/health");
 
-    public static final String[] ALLOWED_METHODS = { "GET", "POST", "PATCH" };
+    public static final String[] ALLOWED_METHODS = { "GET", "POST", "PATCH", "PUT" };
+
+    public enum MessageStatus {
+        SENT, READ
+    }
 
 }
