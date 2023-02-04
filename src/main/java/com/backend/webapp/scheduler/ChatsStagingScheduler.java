@@ -8,7 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ChatsStagingScheduler {
 
     private static final Logger logger = LogManager.getLogger(ChatsStagingScheduler.class);
@@ -19,14 +21,15 @@ public class ChatsStagingScheduler {
     @Autowired
     private MessagesRepository messagesRepository;
 
-    @Scheduled(cron = "*/10 * * ? * * *") // every 10 seconds
+    @Scheduled(cron = "*/10 * * * * *") // every 10 seconds
     public void pushChatsToMessagesCollection() {
+        logger.info("Started pushing chats to messages collection");
         try {
             chatsRepository.findAll().toStream().forEach((chat) -> {
                 messagesRepository.save(this.mapChatToMessage(chat));
             });
         } catch (Exception e) {
-            logger.debug("Exception occured in pushChatsToMessagesCollection()", e);
+            logger.info("Exception occured in pushChatsToMessagesCollection()", e);
         }
     }
 
