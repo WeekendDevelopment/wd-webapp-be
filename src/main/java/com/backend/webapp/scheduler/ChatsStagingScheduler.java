@@ -23,13 +23,13 @@ public class ChatsStagingScheduler {
 
     @Scheduled(cron = "*/10 * * * * *") // every 10 seconds
     public void pushChatsToMessagesCollection() {
-        logger.info("Started pushing chats to messages collection");
+        logger.debug("Started pushing chats to messages collection");
         try {
             chatsRepository.findAll().toStream().forEach((chat) -> {
                 messagesRepository.save(this.mapChatToMessage(chat));
             });
         } catch (Exception e) {
-            logger.info("Exception occured in pushChatsToMessagesCollection()", e);
+            logger.debug("Exception occured in pushChatsToMessagesCollection()", e);
         }
     }
 
