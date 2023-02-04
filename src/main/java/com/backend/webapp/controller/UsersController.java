@@ -1,13 +1,14 @@
 package com.backend.webapp.controller;
 
 import com.backend.webapp.api.UsersApi;
-import com.backend.webapp.delegate.impl.UserServiceDelegateImpl;
 import com.backend.webapp.document.Users;
 import com.backend.webapp.exception.CustomError;
 import com.backend.webapp.exception.ErrorHandler;
 import com.backend.webapp.model.BaseResponse;
 import com.backend.webapp.model.Error;
 import com.backend.webapp.model.User;
+import com.backend.webapp.service.UserService;
+import com.backend.webapp.validator.RequestValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,10 @@ public class UsersController extends ErrorHandler implements UsersApi {
     private static final Logger logger = LogManager.getLogger(UsersController.class);
 
     @Autowired
-    private UserServiceDelegateImpl userService;
+    private UserService userService;
 
     @Override
-    public ResponseEntity getUserData(String email) {
+    public ResponseEntity getUserData(String email, String X_REQUEST_USER) {
         try {
             Users user = userService.getUser(email);
             user.setPasswordHash(PASSWORD_MASKED);
@@ -42,9 +43,9 @@ public class UsersController extends ErrorHandler implements UsersApi {
     }
 
     @Override
-    public ResponseEntity updateUserData(String email, User userUpdate) {
+    public ResponseEntity updateUserData(String email, String X_REQUEST_USER, User userUpdate) {
         try {
-            // add validations
+            RequestValidator.validatePatchUserRequest(userUpdate);
             userService.updateUser(email, userUpdate);
             return ResponseEntity.ok(new BaseResponse().message("User Updated"));
         } catch (CustomError e) {

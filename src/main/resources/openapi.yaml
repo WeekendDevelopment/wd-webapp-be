@@ -102,6 +102,12 @@ paths:
             type: string
             format: email
           required: true
+        - in: header
+          name: X-REQUEST-USER
+          schema:
+            type: string
+            format: email
+          required: true
       responses:
         '200':
           description: Success
@@ -131,6 +137,12 @@ paths:
             type: string
             format: email
           required: true
+        - in: header
+          name: X-REQUEST-USER
+          schema:
+            type: string
+            format: email
+          required: true
       requestBody:
         required: true
         content:
@@ -156,8 +168,101 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /messages:
+    get:
+      operationId: getMessages
+      summary: Get Messages between users
+      parameters:
+        - in: query
+          name: otherUser
+          schema:
+            type: string
+            format: email
+        - in: query
+          name: before
+          schema:
+            type: string
+            format: date-time
+        - in: header
+          name: X-REQUEST-USER
+          schema:
+            type: string
+            format: email
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      operationId: addMessage
+      summary: Put Messages endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '204':
+          description: Success Response, No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    MessageResponse:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    Message:
+      type: object
+      required:
+        - messageFrom
+        - messageTo
+        - message
+      properties:
+        messageFrom:
+          type: string
+          format: email
+        messageTo:
+          type: string
+          format: email
+        message:
+          type: string
+        messageStatus:
+          enum:
+            - SENT
+            - READ
+        timestamp:
+          type: string
+          format: timestamp
     User:
       allOf:
         - $ref: '#/components/schemas/Profile'
@@ -190,12 +295,12 @@ components:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
         - type: object
+        - required:
+            - email
+            - password
+            - fullName
     BasicUserDetails:
       type: object
-      required:
-        - fullName
-        - email
-        - passwordHash
       properties:
         fullName:
           type: string

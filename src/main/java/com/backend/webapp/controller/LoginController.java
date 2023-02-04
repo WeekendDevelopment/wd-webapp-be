@@ -1,7 +1,6 @@
 package com.backend.webapp.controller;
 
 import com.backend.webapp.api.LoginApi;
-import com.backend.webapp.delegate.impl.UserServiceDelegateImpl;
 import com.backend.webapp.exception.CustomError;
 import com.backend.webapp.exception.ErrorHandler;
 import com.backend.webapp.model.BaseResponse;
@@ -9,6 +8,7 @@ import com.backend.webapp.model.Error;
 import com.backend.webapp.model.LoginRequest;
 import com.backend.webapp.model.LoginResponse;
 import com.backend.webapp.security.JwtTokenUtil;
+import com.backend.webapp.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class LoginController extends ErrorHandler implements LoginApi {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
 
     @Autowired
-    private UserServiceDelegateImpl userService;
+    private UserService userService;
 
     @Override
     public ResponseEntity performLogin(LoginRequest loginRequest) {

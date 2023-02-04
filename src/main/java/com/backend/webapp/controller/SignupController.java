@@ -1,12 +1,12 @@
 package com.backend.webapp.controller;
 
 import com.backend.webapp.api.SignupApi;
-import com.backend.webapp.delegate.impl.UserServiceDelegateImpl;
 import com.backend.webapp.exception.CustomError;
 import com.backend.webapp.exception.ErrorHandler;
 import com.backend.webapp.model.Error;
 import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.model.SignupResponse;
+import com.backend.webapp.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class SignupController extends ErrorHandler implements SignupApi {
     private static final Logger logger = LogManager.getLogger(SignupController.class);
 
     @Autowired
-    private UserServiceDelegateImpl userService;
+    private UserService userService;
 
     @Override
     public ResponseEntity addNewUser(SignupRequest signupRequest) {

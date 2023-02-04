@@ -1,4 +1,4 @@
-package com.backend.webapp.delegate.impl;
+package com.backend.webapp.service;
 
 import com.backend.webapp.document.Users;
 import com.backend.webapp.exception.CustomError;
@@ -8,18 +8,15 @@ import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.model.User;
 import com.backend.webapp.repository.UsersRepository;
 import com.backend.webapp.security.EncryptionUtil;
+import com.backend.webapp.validator.DocumentValidator;
 import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
-import static com.backend.webapp.constant.ApplicationConstants.PASSWORD_MASKED;
-import static com.backend.webapp.constant.ErrorConstants.DOCUMENT_NOT_FOUNT_ERROR_DESCRIPTION;
 import static com.backend.webapp.constant.ErrorConstants.DUPLICATE_EMAIL_ERROR;
 
 @Component
-public class UserServiceDelegateImpl {
+public class UserService {
 
     @Autowired
     private UsersRepository usersRepository;
@@ -29,9 +26,7 @@ public class UserServiceDelegateImpl {
 
     public Users getUser(String email) throws CustomError {
         Users user = usersRepository.findByEmail(email);
-        if (Objects.isNull(user)) {
-            throw new CustomError(DOCUMENT_NOT_FOUNT_ERROR_DESCRIPTION);
-        }
+        DocumentValidator.validateUserDocument(user);
         return user;
     }
 

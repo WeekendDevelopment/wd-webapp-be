@@ -1,9 +1,15 @@
 package com.backend.webapp.mapper;
 
+import com.backend.webapp.constant.ApplicationConstants.MessageStatus;
+import com.backend.webapp.document.Chats;
 import com.backend.webapp.document.Users;
+import com.backend.webapp.model.Message;
 import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.model.User;
 import org.apache.commons.lang3.StringUtils;
+
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 public final class RequestMapper {
 
@@ -37,6 +43,16 @@ public final class RequestMapper {
             user.setStatus(userUpdate.getStatus());
         }
         return user;
+    }
+
+    public static Chats mapAddMessageRequest(Message message) {
+        Chats chat = new Chats();
+        chat.setMessageFrom(message.getMessageFrom());
+        chat.setMessageTo(message.getMessageTo());
+        chat.setMessage(message.getMessage());
+        chat.setMessageStatus(MessageStatus.valueOf(message.getMessageStatus().toString()));
+        chat.setTimestamp(ZonedDateTime.parse(message.getTimestamp()).toLocalDateTime());
+        return chat;
     }
 
 }
