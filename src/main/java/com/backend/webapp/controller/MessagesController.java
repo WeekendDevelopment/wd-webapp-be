@@ -1,9 +1,7 @@
 package com.backend.webapp.controller;
 
 import com.backend.webapp.api.MessagesApi;
-import com.backend.webapp.constant.ApplicationConstants;
 import com.backend.webapp.document.Chats;
-import com.backend.webapp.document.Messages;
 import com.backend.webapp.mapper.RequestMapper;
 import com.backend.webapp.model.Error;
 import com.backend.webapp.model.Message;
@@ -18,11 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
@@ -60,7 +55,7 @@ public class MessagesController implements MessagesApi {
             @RequestParam String otherUser) {
         try {
             logger.debug("Opening a flux stream of chat messages");
-            return chatsRepository.findChatsByMessageFromAndMessageTo(X_REQUEST_USER, otherUser);
+            return chatsRepository.findByMessageFromAndMessageTo(X_REQUEST_USER, otherUser);
         } catch (Exception e) {
             logger.error("Error opening a flux stream of messages {}", e.getMessage(), e);
             return Flux.empty();

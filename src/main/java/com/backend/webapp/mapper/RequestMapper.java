@@ -8,7 +8,6 @@ import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.model.User;
 import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 
 public final class RequestMapper {

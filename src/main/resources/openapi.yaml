@@ -178,6 +178,7 @@ paths:
           schema:
             type: string
             format: email
+          required: true
         - in: query
           name: before
           schema:
