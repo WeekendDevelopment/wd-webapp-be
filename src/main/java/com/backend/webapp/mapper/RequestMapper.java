@@ -44,9 +44,9 @@ public final class RequestMapper {
         return user;
     }
 
-    public static Chats mapAddMessageRequest(Message message) {
+    public static Chats mapAddMessageRequest(Message message, String currentUser) {
         Chats chat = new Chats();
-        chat.setMessageFrom(message.getMessageFrom());
+        chat.setMessageFrom(currentUser);
         chat.setMessageTo(message.getMessageTo());
         chat.setMessage(message.getMessage());
         chat.setMessageStatus(MessageStatus.valueOf(message.getMessageStatus().toString()));

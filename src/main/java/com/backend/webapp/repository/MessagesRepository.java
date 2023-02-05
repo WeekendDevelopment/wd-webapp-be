@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface MessagesRepository extends MongoRepository<Messages, String> {
 
-    @Aggregation(pipeline = { "{$sort: {timestamp: 1}}", "{$limit: 50}" })
-    @Query("{ 'messageFrom': { $in: [ ?0, ?1 ] }, 'messageTo': { $in: [ ?0, ?1 ] }, 'timestamp': { $lt: ?2 } }")
-    List<Messages> findByMessageFromAndMessageTo(String messageFrom, String messageTo, LocalDateTime timestamp);
+    @Aggregation(pipeline = { "{$match: {$or: [{messageFrom: ?0, messageTo: ?1}, {messageFrom: ?1, messageTo: ?0}]}},"
+            + "{$match: {timestamp: {$lt: ?2}}}," + "{$sort: {timestamp: 1}}," + "{$limit: 50}" })
+    List<Messages> getMessagesBetweenUsers(String messageFrom, String messageTo, LocalDateTime timestamp);
 
 }

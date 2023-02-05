@@ -212,6 +212,13 @@ paths:
     put:
       operationId: addMessage
       summary: Put Messages endpoint
+      parameters:
+        - in: header
+          name: X-REQUEST-USER
+          schema:
+            type: string
+            format: email
+          required: true
       requestBody:
         required: true
         content:
@@ -245,13 +252,9 @@ components:
     Message:
       type: object
       required:
-        - messageFrom
         - messageTo
         - message
       properties:
-        messageFrom:
-          type: string
-          format: email
         messageTo:
           type: string
           format: email

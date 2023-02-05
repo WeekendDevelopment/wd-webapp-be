@@ -11,11 +11,11 @@ import com.backend.webapp.security.EncryptionUtil;
 import com.backend.webapp.validator.DocumentValidator;
 import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import static com.backend.webapp.constant.ErrorConstants.DUPLICATE_EMAIL_ERROR;
 
-@Component
+@Service
 public class UserService {
 
     @Autowired
