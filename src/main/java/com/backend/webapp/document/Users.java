@@ -7,12 +7,24 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document
 @JsonInclude(Include.NON_NULL)
 public class Users extends Profile {
 
     @Id
     private String id;
+
+    private List<String> history;
+
+    public List<String> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<String> history) {
+        this.history = history;
+    }
 
     @JsonIgnore()
     public String getId() {
