@@ -240,8 +240,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /messages/history:
+    get:
+      operationId: getMessagesHistory
+      summary: Get Messages history of the current user
+      parameters:
+        - in: header
+          name: X-REQUEST-USER
+          schema:
+            type: string
+            format: email
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageHistoryResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    MessageHistoryResponse:
+      type: object
+      properties:
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserHistory'
+    UserHistory:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+        noOfUnreadMessages:
+          type: integer
+        lastMessage:
+          type: string
     MessageResponse:
       type: object
       properties:

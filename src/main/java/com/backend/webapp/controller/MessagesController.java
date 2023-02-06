@@ -8,6 +8,7 @@ import com.backend.webapp.exception.ErrorHandler;
 import com.backend.webapp.mapper.RequestMapper;
 import com.backend.webapp.model.Error;
 import com.backend.webapp.model.Message;
+import com.backend.webapp.model.MessageHistoryResponse;
 import com.backend.webapp.repository.ChatsRepository;
 import com.backend.webapp.service.MessageService;
 import com.backend.webapp.service.UserService;
@@ -90,6 +91,21 @@ public class MessagesController extends ErrorHandler implements MessagesApi {
         } catch (Exception e) {
             logger.error("Error while inserting message {}", e.getMessage(), e);
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @Override
+    public ResponseEntity getMessagesHistory(String currentUser) {
+        try {
+            logger.debug("Fetching user history for {}", currentUser);
+            return ResponseEntity
+                    .ok(new MessageHistoryResponse().history(messageService.getMessageHistory(currentUser)));
+        } catch (CustomError e) {
+            logger.error("Error fetching user history for {}", currentUser, e);
+            return ResponseEntity.badRequest().body(new Error().message(e.getErrorMessage()));
+        } catch (Exception e) {
+            logger.error("Error fetching user history for {}", currentUser, e);
+            return ResponseEntity.internalServerError().body(new Error().message(e.getLocalizedMessage()));
         }
     }
 
