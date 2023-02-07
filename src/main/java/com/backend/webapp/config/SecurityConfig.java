@@ -1,4 +1,4 @@
-package com.backend.webapp;
+package com.backend.webapp.config;
 
 import com.backend.webapp.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
