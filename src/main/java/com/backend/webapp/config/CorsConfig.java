@@ -1,4 +1,4 @@
-package com.backend.webapp;
+package com.backend.webapp.config;
 
 import com.backend.webapp.util.PropertiesLoader;
 import org.springframework.beans.factory.annotation.Autowired;

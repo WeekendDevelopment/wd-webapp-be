@@ -2,22 +2,17 @@ package com.backend.webapp.service;
 
 import com.backend.webapp.constant.ApplicationConstants.MessageStatus;
 import com.backend.webapp.document.Messages;
-import com.backend.webapp.document.Users;
 import com.backend.webapp.exception.CustomError;
 import com.backend.webapp.model.UserHistory;
 import com.backend.webapp.repository.MessagesRepository;
-import com.backend.webapp.repository.UsersRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class MessageService {

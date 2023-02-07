@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
+  <Properties>
+    <Property name="Log4jContextSelector">org.apache.logging.log4j.core.async.AsyncLoggerContextSelector</Property>
+  </Properties>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
     </Console>
   </Appenders>
   <Loggers>
-    <Root level="error">
-      <AppenderRef ref="Console"/>
+    <Logger name="com.backend.webapp" level="WARN" additivity="false">
+      <AppenderRef ref="Console" />
+    </Logger>
+    <Root level="INFO">
+      <AppenderRef ref="Console" />
     </Root>
   </Loggers>
 </Configuration>

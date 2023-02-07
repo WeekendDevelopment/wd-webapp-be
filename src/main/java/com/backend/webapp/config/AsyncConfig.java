@@ -1,4 +1,4 @@
-package com.backend.webapp;
+package com.backend.webapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
