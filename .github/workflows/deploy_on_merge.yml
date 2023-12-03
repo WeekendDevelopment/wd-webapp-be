@@ -33,16 +33,14 @@ jobs:
       #Maven Build
       - name: Maven Build
         run: mvn clean install
-      #GCP Authentication
-      - name: Authenticate to Google Cloud
-        uses: 'google-github-actions/auth@v1'
+      #Heroku Deployment
+      - uses: actions/checkout@v2
+      - name: Deploy to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.12.12
         with:
-          create_credentials_file: true
-          workload_identity_provider: 'projects/${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_PROJECT_ID }}/locations/global/workloadIdentityPools/${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_ID }}/providers/${{ secrets.GCP_WORKLOAD_IDENTITY_POOL_PROVIDER_ID }}'
-          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
-          project_id: '${{ secrets.GCP_PROJECT }}'
-      #GCP Deployment
-      - name: Deploy to Google Cloud
-        uses: 'google-github-actions/deploy-appengine@v1'
-        with:
-          project_id: '${{ secrets.GCP_PROJECT }}'
+        # This will be used for authentication. You can find it in your heroku homepage account settings
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        # Email that you use with heroku
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+        # The appname to use for deploying/updating
+          heroku_app_name: ${{secrets.HEROKU_APP}}
