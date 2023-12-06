@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @ConfigurationProperties(prefix = "frontend")
-@Configuration("propertiesLoader")
+@Configuration("PropertiesLoader")
 public class PropertiesLoader {
 
     private String origin;
