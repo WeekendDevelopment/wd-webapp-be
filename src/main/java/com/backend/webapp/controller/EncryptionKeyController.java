@@ -3,8 +3,7 @@ package com.backend.webapp.controller;
 import com.backend.webapp.api.EncryptionKeyApi;
 import com.backend.webapp.model.EncryptionKeyResponse;
 import com.backend.webapp.model.Error;
-import com.backend.webapp.security.EncryptionUtil;
-import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
+import com.backend.webapp.security.EncryptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,15 @@ public class EncryptionKeyController implements EncryptionKeyApi {
     private static final Logger logger = LogManager.getLogger(EncryptionKeyController.class);
 
     @Autowired
-    private SecretManagerTemplate secretManagerTemplate;
+    private EncryptionService encryptionService;
 
     @Override
     public ResponseEntity getEncryptionKey() {
         try {
-            return ResponseEntity.ok(new EncryptionKeyResponse()
-                    .encryptionKey(EncryptionUtil.getPublicKeyAsString(secretManagerTemplate)));
+            return ResponseEntity
+                    .ok(new EncryptionKeyResponse().encryptionKey(encryptionService.getPublicKeyAsString()));
         } catch (Exception e) {
-            logger.error("Exception occured while getting public key from Google Cloud", e);
+            logger.error("Exception occurred while getting public key from keystore", e);
             return ResponseEntity.internalServerError().body(new Error().message(GCP_GET_PUBLIC_KEY_ERROR));
         }
     }

@@ -7,9 +7,8 @@ import com.backend.webapp.model.LoginRequest;
 import com.backend.webapp.model.SignupRequest;
 import com.backend.webapp.model.User;
 import com.backend.webapp.repository.UsersRepository;
-import com.backend.webapp.security.EncryptionUtil;
+import com.backend.webapp.security.EncryptionService;
 import com.backend.webapp.validator.DocumentValidator;
-import com.google.cloud.spring.secretmanager.SecretManagerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ public class UserService {
     private UsersRepository usersRepository;
 
     @Autowired
-    private SecretManagerTemplate secretManagerTemplate;
+    private EncryptionService encryptionService;
 
     public Users getUser(String email) throws CustomError {
         Users user = usersRepository.findByEmail(email);
@@ -41,7 +40,7 @@ public class UserService {
             throw new CustomError(DUPLICATE_EMAIL_ERROR);
         }
         // validating if proper cipher text is received
-        EncryptionUtil.decryptData(secretManagerTemplate, signupRequest.getPasswordHash());
+        encryptionService.decryptData(signupRequest.getPasswordHash());
         usersRepository.save(RequestMapper.mapToUsers(signupRequest));
     }
 
@@ -51,8 +50,8 @@ public class UserService {
     }
 
     private boolean verifyPassword(String loginRequestPassword, String userDocumentPassword) throws Exception {
-        return EncryptionUtil.decryptData(secretManagerTemplate, loginRequestPassword)
-                .equals(EncryptionUtil.decryptData(secretManagerTemplate, userDocumentPassword));
+        return encryptionService.decryptData(loginRequestPassword)
+                .equals(encryptionService.decryptData(userDocumentPassword));
     }
 
 }
