@@ -16,7 +16,7 @@
 		<spring-cloud-gcp.version>3.4.0</spring-cloud-gcp.version>
 		<spring-cloud.version>2021.0.5</spring-cloud.version>
 		<aspectj.version>1.9.7</aspectj.version>
-		<log4j2.version>2.19.0</log4j2.version>
+		<log4j2.version>2.22.0</log4j2.version>
 	</properties>
 	<dependencies>
 		<dependency>
