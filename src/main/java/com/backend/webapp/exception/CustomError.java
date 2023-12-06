@@ -1,6 +1,6 @@
 package com.backend.webapp.exception;
 
-public final class CustomError extends Throwable {
+public final class CustomError extends Exception {
 
     private static final long serialVersionUID = 1L;
 
