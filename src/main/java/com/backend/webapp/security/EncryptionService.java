@@ -1,30 +1,41 @@
 package com.backend.webapp.security;
 
+import com.backend.webapp.document.Keystore;
+import com.backend.webapp.exception.CustomError;
+import com.backend.webapp.repository.KeystoreRepository;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-@ConfigurationProperties(prefix = "keystore")
 public class EncryptionService {
 
     private static final Logger logger = LogManager.getLogger(EncryptionService.class);
 
     private static final Map<String, KeyStore> keyStoreCache = new ConcurrentHashMap<>();
 
-    @Value("${keystore.path}")
-    private String path;
+    @Autowired
+    KeystoreRepository keystoreRepository;
+
+    @Value("${keystore.name}")
+    private String name;
 
     public String encryptData(String data) throws Exception {
         try {
@@ -61,12 +72,21 @@ public class EncryptionService {
                 return keyStoreCache.get("keyStore");
             }
             KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keystore.load(new FileInputStream(path), System.getenv("KEYSTORE_PWD").toCharArray());
+            keystore.load(fetchKeyStore(), System.getenv("KEYSTORE_PWD").toCharArray());
             keyStoreCache.put("keyStore", keystore);
             return keystore;
         } catch (Exception e) {
             logger.error("Exception occurred while loading keystore", e);
             throw e;
+        }
+    }
+
+    private InputStream fetchKeyStore() throws CustomError {
+        List<Keystore> keyStoreList = keystoreRepository.findByName(name);
+        if (CollectionUtils.isNotEmpty(keyStoreList)) {
+            return new ByteArrayInputStream(Base64.getDecoder().decode(keyStoreList.get(0).getKeystore()));
+        } else {
+            throw new CustomError("Unable to retrieve keystore");
         }
     }
 
